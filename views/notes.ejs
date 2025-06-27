@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Notes</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f4f4f4 60%, #e0e7ff 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .notes-container {
+            max-width: 600px;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .note-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 20px 18px;
+            font-size: 1.1em;
+            color: #22223b;
+            word-break: break-word;
+        }
+        .note-date {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 8px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="notes-container">
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 18px;">
+            <a href="/home">
+                <button style="padding: 9px 22px; background: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 1em; font-weight: 500; cursor: pointer;">
+                    Create Note
+                </button>
+            </a>
+        </div>
+        <% if (notes.length === 0) { %>
+            <div class="note-card">No notes yet.</div>
+        <% } %>
+      <% notes.forEach(function(note) { %>
+        <div class="note-card" id="note-<%= note._id %>">
+            <div><%= note.content %></div>
+            <div class="note-date">
+            <%= note.createdAt ? note.createdAt.toLocaleString() : '' %>
+            </div>
+
+            <div style="margin-top: 12px; display: flex; gap: 10px;">
+            <!-- Update Button triggers input -->
+            <button onclick="toggleEditForm('<%= note._id %>')" style="background: #007bff; color: white; border: none; border-radius: 4px; padding: 7px 16px; cursor: pointer;">
+                Update
+            </button>
+
+            <!-- Delete Form -->
+            <form action="/notes/delete/<%= note._id %>" method="post">
+                <button type="submit" style="background: #dc3545; color: white; border: none; border-radius: 4px; padding: 7px 16px; cursor: pointer;">
+                Delete
+                </button>
+            </form>
+            </div>
+
+            <!-- Hidden Update Form -->
+            <form id="edit-form-<%= note._id %>" action="/notes/update/<%= note._id %>" method="POST" style="display: none; margin-top: 12px;">
+            <textarea name="updatedContent" rows="3" style="width: 100%; padding: 8px; border-radius: 4px;"><%= note.content %></textarea>
+            <div style="margin-top: 8px; display: flex; gap: 10px;">
+                <button type="submit" style="background: #28a745; color: white; padding: 6px 14px; border: none; border-radius: 4px;" onclick="window.location.href='/update';">Update</button>
+                <button type="button" onclick="toggleEditForm('<%= note._id %>')" style="background: #6c757d; color: white; padding: 6px 14px; border: none; border-radius: 4px;">Cancel</button>
+            </div>
+            </form>
+        </div>
+        <% }); %>
+    </div>
+    <script>
+        function toggleEditForm(noteId) {
+            const form = document.getElementById(`edit-form-${noteId}`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>

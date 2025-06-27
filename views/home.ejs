@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notemate</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f4f4f4 60%, #e0e7ff 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 18px 32px;
+        }
+        .navbar h2 {
+            margin: 0;
+            color: #22223b;
+            font-size: 1.6em;
+            letter-spacing: 1px;
+        }
+        #viewNotes {
+            padding: 9px 22px;
+            background: linear-gradient(90deg, #007bff 60%, #5a8dee 100%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        #viewNotes:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #3b6cb7 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: #e0ffe0;
+            color: #187a18;
+            border: 1px solid #b3ffb3;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-align: center;
+            font-size: 1em;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .alert.show {
+            top: 85px;
+            opacity: 1;
+            visibility: visible;
+        }
+        .note-form {
+            background: #fff;
+            max-width: 400px;
+            margin: 40px auto 0 auto;
+            padding: 28px 24px 22px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 12px;
+        }
+        .note-form input[type="text"] {
+            flex: 1;
+            padding: 11px;
+            border: 1.5px solid #bfc9d1;
+            border-radius: 5px;
+            font-size: 1em;
+            background: #f9faff;
+            transition: border 0.2s, background 0.2s;
+            outline: none;
+        }
+        .note-form input[type="text"]:focus {
+            border-color: #007bff;
+            background: #eef6ff;
+        }
+        .note-form button {
+            padding: 11px 18px;
+            background: linear-gradient(90deg, #007bff 60%, #5a8dee 100%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .note-form button:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #3b6cb7 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        #viewNotes:hover {
+            background: #0056b3;
+            transform: translateY(-2px) scale(1.03);
+        }
+        #logoutBtn {
+            padding: 9px 22px;
+            background: #3c3ce7;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        #logoutBtn:hover {
+            background: #2d3bd5;
+            transform: translateY(-2px) scale(1.03);
+        }
+    </style>
+
+    <!-- Update your navbar buttons: -->
+    <div class="navbar">
+        <h2>Notemate</h2>
+        <button id="viewNotes" onclick="window.location.href='/notes';">View Notes</button>
+        <button id="logoutBtn" onclick="window.location.href='/logout';">Logout</button>
+    </div>
+    <% if(username){ %>
+        <div class="alert" id="welcomeAlert">
+            Welcome <%= username %>
+        </div>
+    <% } %>
+    <form class="note-form" action="/note" method="POST">
+        <input type="text" placeholder="Enter your note here..." id="noteInput" name="note" required>
+        <button id="saveNote" type="submit">Save Note</button>
+    </form>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('welcomeAlert');
+            if (alert) {
+                // After a short delay, add the 'show' class to trigger the animation
+                setTimeout(() => {
+                    alert.classList.add('show');
+                }, 100);
+
+                // After 3 seconds, remove the 'show' class to hide it again
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                }, 3100); // 100ms delay + 3000ms visible
+            }
+        });
+    </script>
+</body>
+</html>
